@@ -1,12 +1,12 @@
 # GE Updater
 
-This is an utility tool built to check whether custom Proton implementation GloriousEggroll has a new release available on GitHub.
+This is an utility tool built to check whether custom Proton implementation [GloriousEggroll](https://github.com/GloriousEggroll/proton-ge-custom) has a new release available on GitHub.
 
 ## Requirements
 
 - Python installed on your computer (Tested on Python 3.10.2)
 - Linux distribution
-- Folder structure as shown in (Valve Proton GitHub)[https://github.com/ValveSoftware/Proton#install-proton-locally]
+- Folder structure as shown in [Valve Proton GitHub](https://github.com/ValveSoftware/Proton#install-proton-locally)
 
 ## Configuring the program
 

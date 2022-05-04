@@ -85,7 +85,7 @@ def install_glorious_eggroll(result):
 	filepath_for_tar = download_tarball(tar_url, result['tag_name'])
 	if config['proton']['keep_old'] == 'False':
 		remove_old_versions()
-	extract_tar("GE-Proton7-14.tar.gz")#filepath_for_tar)
+	extract_tar(filepath_for_tar)
 	
 
 def main():

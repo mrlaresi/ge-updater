@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import requests
-from os import scandir, remove
+from os import scandir, remove, rmdir
 import configparser
 import tarfile
 from shutil import copyfileobj
@@ -17,12 +17,12 @@ proton_path = f"{str(Path.home())}{config['proton']['proton_location']}"
 def fetch_already_installed():
 	"""Finds already installed versions of GE
 	
-	Return: returns the newest install of GE found
+	Return: returns all GEProton versions found
 	"""
 
 	subfolders = [file.name for file in scandir(proton_path) if file.is_dir() and "proton" in file.name.lower()]
 	subfolders.sort()
-	return subfolders[-1]
+	return subfolders
 
 
 def fetch_latest():
@@ -67,12 +67,12 @@ def extract_tar(file):
 	remove(file)
 
 
-def remove_old_versions():
-	"""Removes old versions of GE
+def remove_old_versions(proton_installs):
+	"""Removes ALL old versions of GE
 	
 	"""
-	
-	raise NotImplementedError
+	for proton in proton_installs[0:-1]:
+		rmdir(f"{proton_path}/{proton}")
 
 
 def install_glorious_eggroll(result):
@@ -83,29 +83,36 @@ def install_glorious_eggroll(result):
 	
 	tar_url = result['assets'][1]['browser_download_url']
 	filepath_for_tar = download_tarball(tar_url, result['tag_name'])
-	if config['proton']['keep_old'] == 'False':
-		remove_old_versions()
 	extract_tar(filepath_for_tar)
-	
+
+def verify_user_yes_no(question):
+	print(question)
+	while True:
+		user_input = input("(y/n)? >").lower()
+		if user_input == "y":
+			return True
+		elif user_input == "n":
+			return False
+		print("Invalid input, please type 'y' or 'n'.")
+
 
 def main():
 	result = fetch_latest()
-	newest_version = fetch_already_installed()
+	versions = fetch_already_installed()
+	newest_version = versions[-1]
 	tag_name = result['tag_name']
-	if tag_name == newest_version:
+	if tag_name != newest_version:
 		print(f"No new version of GloriousEggroll was found.\r\n Newest installed version is {newest_version}, latest available version was {tag_name}.")
 		exit(0)
 
-	print(f"New version of Proton was found. Do you want to install {tag_name}?")
-	while(True):
-		user_input = input("(y/n)? >")
-		if "y" == user_input.lower():
-			install_glorious_eggroll(result)
+	is_install = verify_user_yes_no(f"New version of Proton was found. Do you want to install {tag_name}?")
+	if is_install:
+		#install_glorious_eggroll(result)
+		if config['proton']['keep_old'] == 'False':
+			is_remove = verify_user_yes_no(f"Warning: Program is set to delete ALL old installs of proton. All other versions except {tag_name} will be removed. Do you accept this?")
+			if is_remove:
+				remove_old_versions(versions)
 			exit(0)
-		if "n" == user_input.lower():
-			exit(0)
-		print("Invalid input, please type 'y' or 'n'.")
-
 
 if __name__ == '__main__':
 	main()

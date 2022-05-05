@@ -107,7 +107,7 @@ def main():
 
 	is_install = verify_user_yes_no(f"New version of Proton was found. Do you want to install {tag_name}?")
 	if is_install:
-		#install_glorious_eggroll(result)
+		install_glorious_eggroll(result)
 		if config['proton']['keep_old'] == 'False':
 			is_remove = verify_user_yes_no(f"Warning: Program is set to delete ALL old installs of proton. All other versions except {tag_name} will be removed. Do you accept this?")
 			if is_remove:

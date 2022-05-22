@@ -101,11 +101,11 @@ def main():
 	versions = fetch_already_installed()
 	newest_version = versions[-1]
 	tag_name = result['tag_name']
-	if tag_name != newest_version:
+	if tag_name == newest_version:
 		print(f"No new version of GloriousEggroll was found.\r\n Newest installed version is {newest_version}, latest available version was {tag_name}.")
 		exit(0)
 
-	is_install = verify_user_yes_no(f"New version of Proton was found. Do you want to install {tag_name}?")
+	is_install = verify_user_yes_no(f"Newer than version {newest_version} of Proton was found. Do you want to install {tag_name}?")
 	if is_install:
 		install_glorious_eggroll(result)
 		if config['proton']['keep_old'] == 'False':

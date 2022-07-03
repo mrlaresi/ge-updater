@@ -1,9 +1,9 @@
 #!/usr/bin/python
 import requests
-from os import scandir, remove, rmdir
+from os import scandir, remove
 import configparser
 import tarfile
-from shutil import copyfileobj
+from shutil import copyfileobj, rmtree
 from pathlib import Path
 
 git_api = "https://api.github.com"
@@ -72,7 +72,8 @@ def remove_old_versions(proton_installs):
 	
 	"""
 	for proton in proton_installs[0:-1]:
-		rmdir(f"{proton_path}/{proton}")
+		print(f"Removing {proton_path}{proton}")
+		rmtree(f"{proton_path}{proton}", ignore_errors=True)
 
 
 def install_glorious_eggroll(result):

@@ -20,6 +20,9 @@ def fetch_already_installed():
 	Return: returns all GEProton versions found
 	"""
 
+	if (not Path(proton_path).is_dir()):
+		verify_user_yes_no(f"Folder 'compatibilitytools.d' does not exist in steam folder. This is required to use Glorious Eggroll.\r\nCreate folder?")
+		Path.mkdir(Path(proton_path))
 	subfolders = [file.name for file in scandir(proton_path) if file.is_dir() and "proton" in file.name.lower()]
 	subfolders.sort()
 	return subfolders
@@ -59,7 +62,7 @@ def extract_tar(file):
 	
 	file: filepath to the tarball
 	"""
-	
+
 	print("Extracting")
 	tar = tarfile.open(file, "r:gz")
 	tar.extractall(proton_path)
@@ -71,7 +74,7 @@ def remove_old_versions(proton_installs):
 	"""Removes ALL old versions of GE
 	
 	"""
-	for proton in proton_installs[0:-1]:
+	for proton in proton_installs:
 		print(f"Removing {proton_path}{proton}")
 		rmtree(f"{proton_path}{proton}", ignore_errors=True)
 
@@ -100,13 +103,18 @@ def verify_user_yes_no(question):
 def main():
 	result = fetch_latest()
 	versions = fetch_already_installed()
-	newest_version = versions[-1]
+	newest_version = ''
+	if (len(versions) > 0):
+		newest_version = versions[-1]
 	tag_name = result['tag_name']
 	if tag_name == newest_version:
 		print(f"No new version of GloriousEggroll was found.\r\n Newest installed version is {newest_version}, latest available version was {tag_name}.")
 		exit(0)
 
-	is_install = verify_user_yes_no(f"Newer than version {newest_version} of Proton was found. Do you want to install {tag_name}?")
+	printed = ''
+	if (newest_version):
+		printed = f"Newer than version {newest_version} of "
+	is_install = verify_user_yes_no(f"{printed}GE_Proton was found. Do you want to install {tag_name}?")
 	if is_install:
 		install_glorious_eggroll(result)
 		if config['proton']['keep_old'] == 'False':

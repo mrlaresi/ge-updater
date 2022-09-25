@@ -5,7 +5,8 @@ This is an utility tool built to check whether custom Proton implementation [Glo
 ## Requirements
 
 - Python installed on your computer (Tested on Python 3.10.2)
-- Linux distribution
+- Computer running linux distribution
+- Steam installed
 - Folder structure as shown in [Valve Proton GitHub](https://github.com/ValveSoftware/Proton#install-proton-locally)
 
 ## Configuring the program
